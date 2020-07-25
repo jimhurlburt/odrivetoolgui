@@ -1,7 +1,7 @@
 import sys, time
 
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow
-from ui_odrive import Ui_Odrive\
+from ui_odrive import Ui_Odrive
 
 import odrive
 import odrive.enums
@@ -18,6 +18,9 @@ class OdriveToolGui:
 
       self.drive = ""
       self.axis = ""
+
+      (self.dEnums, self.dAxisError, self.dMotorError,
+       self.dEncoderError, self.dControllerError) = getenums()
 
       self.ui.actionFind_any.triggered.connect(self.findanyodrive)
       self.ui.actionFind_on_port.triggered.connect(self.findonport)
@@ -47,8 +50,8 @@ class OdriveToolGui:
 
       self.ui.drive_label.setText("Odrive {} found".format(self.drive.serial_number))
       print(self.drive.serial_number)
-      print(self.drive.axis0.motor)
-      print(dir(self.drive.axis0.motor))
+      #print(self.drive.axis0.motor)
+      #print(dir(self.drive.axis0.motor))
 
    #*** OdriveToolGui.findanyodrive ************************
 
@@ -64,7 +67,7 @@ class OdriveToolGui:
 
       self.ui.configframelabel.setText("Axis 1")
       self.axis = self.drive.axis1
-      self.calibrateAxis(self.axis)
+      self.calibrateAxis()
 
    #*** OdriveToolGui.calibrateAxis1 ***********************
 
@@ -103,6 +106,11 @@ class OdriveToolGui:
 
    def runAxisCalibrate(self):
       self.axis.requested_state = odrive.enums.AXIS_STATE_FULL_CALIBRATION_SEQUENCE
+
+      dErrors = self.checkerrors()
+
+      if dErrors:
+         print(dErrors)
 
    #*** OdriveToolGui.runAxisCalibrate *********************
 
@@ -154,8 +162,99 @@ class OdriveToolGui:
 
       else:
          self.axis = self.drive.axis0
-         
+
+   #*** OdriveToolGui.axisSave *****************************
+
+   def checkerrors(self):
+      dErrors = {}
+      cAxis = self.ui.configframelabel.text()
+      
+      if self.axis.error:
+         dErrors[cAxis] = [self.dAxisError[self.axis.error], {}]
+         print(self.dAxisError[self.axis.error])
+
+         if self.axis.motor.error:
+            dErrors[cAxis][1]["motor"] = \
+                  self.MotorError[self.axis.motor.error]
+
+         if self.axis.controller.error:
+            dErrors[cAxis][1]["controller"] = \
+                  self.ControllerError[self.axis.controller.error]
+
+         if self.axis.encoder.error:
+            dErrors[cAxis][1]["encoder"] = \
+                  self.EncoderError[self.axis.encoder.error]
+
+      return dErrors
+
+   #*** OdriveToolGui.checkerrors **************************
 #*** class OdriveToolGui ***************************************************
+
+def getenums():
+   #print(dir(odrive.enums))
+
+   aRay = dir(odrive.enums)
+
+   dEnums = {}
+   i = 0
+
+   while not "__" in aRay[i]:
+      dEnums[str(aRay[i])] = eval("odrive.enums.{}".format(aRay[i]))
+      i = i+1
+
+   #print(len(dEnums), dEnums, "\n")
+
+   err = odrive.enums.errors.axis()
+   aRay = dir(err)
+
+   dAxisError = {}
+   i = 0
+
+   while not "__" in aRay[i]:
+      dAxisError[eval("err.{}".format(aRay[i]))] = str(aRay[i])
+      i +=1
+
+   #print(dAxisError, "\n")
+
+   err = odrive.enums.errors.motor()
+   aRay = dir(err)
+
+   dMotorError = {}
+   i = 0
+
+   while not "__" in aRay[i]:
+      dMotorError[eval("err.{}".format(aRay[i]))] = str(aRay[i])
+      i +=1
+
+   #print(dMotorError, "\n")
+
+   err = odrive.enums.errors.encoder()
+   aRay = dir(err)
+
+   dEncoderError = {}
+   i = 0
+
+   while not "__" in aRay[i]:
+      dEncoderError[eval("err.{}".format(aRay[i]))] = str(aRay[i])
+      i +=1
+
+   #print(dEncoderError, "\n")
+
+   err = odrive.enums.errors.controller()
+   aRay = dir(err)
+
+   dControllerError = {}
+   i = 0
+
+   while not "__" in aRay[i]:
+      dControllerError[eval("err.{}".format(aRay[i]))] = str(aRay[i])
+      i +=1
+
+   #print(dControllerError, "\n")
+
+   return (dEnums, dAxisError, dMotorError, dEncoderError, dControllerError)
+
+#*** getenums **************************************************************
 
 if __name__ == "__main__":
    OdriveToolGui()

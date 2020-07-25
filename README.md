@@ -1,5 +1,6 @@
 This readme is for odrivetoolgui
 
+7/23/20
 As the name suggests, the immediate goal is to
 make a gui interface for the current version of
 odrivetool.
@@ -61,6 +62,15 @@ are encouraged to participate.
 Jim Hurlburt
 Bend, OR USA
 hurlburtjl@gmail.com
+
+*****************************************************
+7/24/20
+
+Added LICENSE
+
+fixed a bug on axis1
+
+Added error checking after running calibration.
 
 
 
