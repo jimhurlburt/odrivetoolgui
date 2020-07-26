@@ -104,7 +104,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>51</x>
@@ -288,8 +288,15 @@
     <addaction name="actionAxis0"/>
     <addaction name="actionAxis1"/>
    </widget>
+   <widget class="QMenu" name="menuAxisInfo">
+    <property name="title">
+     <string>A&amp;xis  Info</string>
+    </property>
+    <addaction name="actionConfigs"/>
+   </widget>
    <addaction name="menuOdrive_Tool"/>
    <addaction name="menuBasic_Config"/>
+   <addaction name="menuAxisInfo"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionFind_any">
@@ -318,6 +325,21 @@
   <action name="actionAxis1">
    <property name="text">
     <string>A&amp;xis1</string>
+   </property>
+  </action>
+  <action name="actionAxis0ConfigInfo">
+   <property name="text">
+    <string>Axis0</string>
+   </property>
+  </action>
+  <action name="actionAxis1ConfigInfo">
+   <property name="text">
+    <string>Axis1</string>
+   </property>
+  </action>
+  <action name="actionConfigs">
+   <property name="text">
+    <string>Configs</string>
    </property>
   </action>
  </widget>

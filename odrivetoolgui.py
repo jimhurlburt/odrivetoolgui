@@ -6,6 +6,8 @@ from ui_odrive import Ui_Odrive
 import odrive
 import odrive.enums
 
+import getconfigs
+
 #***************************************************************************
 
 class OdriveToolGui:
@@ -27,6 +29,8 @@ class OdriveToolGui:
    
       self.ui.actionAxis0.triggered.connect(self.calibrateAxis0)
       self.ui.actionAxis1.triggered.connect(self.calibrateAxis1)
+
+      self.ui.actionConfigs.triggered.connect(self.getaxisconfig)
 
       self.ui.Save_button.clicked.connect(self.axisSave)
       self.ui.Calibrate_button.clicked.connect(self.runAxisCalibrate)
@@ -188,6 +192,27 @@ class OdriveToolGui:
       return dErrors
 
    #*** OdriveToolGui.checkerrors **************************
+
+   def getaxisconfig(self):
+
+      if not self.axis:
+         print("Must choose an axis first")
+
+      else:
+         if self.ui.configframelabel.text() == "Axis 0":
+            cAxis = "axis0"
+
+         else:
+            cAxis = "axis1"
+         
+         dConfig = getconfigs.getconfig(self.drive, self.axis, cAxis)
+         cTxt = getconfigs.showconfig(dConfig, cAxis)
+
+         fh = open(cAxis + "_config.txt", 'wt')
+         fh.write(cTxt)
+         fh.close()
+   
+   #*** OdriveToolGui.getaxisconfig ************************
 #*** class OdriveToolGui ***************************************************
 
 def getenums():

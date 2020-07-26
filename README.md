@@ -72,6 +72,27 @@ fixed a bug on axis1
 
 Added error checking after running calibration.
 
+*****************************************************
+
+7/26/20
+added getconfigs.py
+
+Added menu option to get config info for an axis
+It writes to a text file, <axis>_config.txt.  This
+is not elegant, but it works for now.  To have it
+show in a window is certainly something to do.
+
+I retrieved the values that I have some notion of
+what they mean and that I might wish to change.
+If there is a value missing that someone feels a
+need for, please let me know.  Include a paragraph
+telling what the value does and something about
+when and how you might wish to change it so that I
+can include it in the config windows in an
+appopriate fashion.  I expect the current set is
+incomplete and will add to it when I find a
+reason.
+
 
 
 
